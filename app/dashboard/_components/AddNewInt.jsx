@@ -12,16 +12,18 @@ import { Button } from '@/components/ui/button';
 import { Input } from "@/components/ui/input"
 import { Textarea } from '@/components/ui/textarea';
 import { LoaderCircle } from 'lucide-react';
-import { chatSession } from '@/utils/geminiMoDEL';
+import { chatSession } from '@/utils/geminiModel';
 import { db } from '@/utils/db';
 import { MockInterview } from '@/utils/schema';
 import { v4 as uuidv4 } from 'uuid';
 import moment from 'moment';
 import { useUser } from '@clerk/nextjs';
+import { useRouter } from 'next/navigation';
 
-  
+
 
 function AddNewInt() {
+    const router=useRouter();
     const [openDialog,setOpenDialog]=useState(false);
     const [jobPos,setJobPos]=useState();
     const [jobDesc,setJobDesc]=useState();
@@ -57,6 +59,7 @@ function AddNewInt() {
             console.log("Data Inserted",dbResponse);
             if(dbResponse){
                 setOpenDialog(false);
+                router.push('../../dashboard/interview/'+dbResponse[0]?.mockId)
             }
         }else{
             console.log("Error");
