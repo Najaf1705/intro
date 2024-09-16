@@ -38,10 +38,10 @@ function AddNewInt() {
         setLoading(true);
         // console.log(jobPos,jobDesc,experience);
 
-        const inputPrompt=`Job Position: ${jobPos} Tech Stack: ${jobDesc} Experience Level: ${experience} Instructions: Please generate mock interview questions along with answers based on the provided job position, tech stack, and experience. The questions should cover: Core technical skills related to the tech stack. Problem-solving and coding challenges relevant to the role. System design and architecture for [backend/frontend, etc.]. Best practices for coding and performance optimization. Behavioral questions suitable for a candidate with [X] years of experience. give questions and answers as only fields in json only 10 questions` 
+        const inputPrompt=`Job Position: ${jobPos} Tech Stack: ${jobDesc} Experience Level: ${experience} Instructions: Please generate mock interview questions along with answers based on the provided job position, tech stack, and experience. The questions should cover: Core technical skills related to the tech stack. Problem-solving and coding challenges relevant to the role. System design and architecture. Best practices for coding and performance optimization. Behavioral questions suitable for a candidate with ${experience} years of experience. give questions and answers as an array of objects each containing a question and answer only 10 questions [{},{}...] nothing else` 
         const result=await chatSession.sendMessage(inputPrompt);
-        // console.log(result.response.text());
-        const response=result.response.text().replaceAll('```json','').replaceAll('```','');
+        console.log(result.response.text());
+        const response=await result.response.text().replaceAll('```json','').replaceAll('```','');
         console.log(JSON.parse(response));
         setInterviewQues(response);
 
@@ -87,21 +87,21 @@ function AddNewInt() {
                                 <label className=''>Job role/Job position</label>
                                 <Input className="mt-1 bg-primary-foreground" placeholder="Ex. Backend Developer"
                                     required
-                                    onChange={(event)=>setJobPos(event.target.value)}
+                                    onChange={(event)=>setJobPos(event.target.value.toLowerCase())}
                                 />
                             </div>
                             <div>
                                 <label className=''>Job description/Tech Stack</label>
                                 <Textarea className="mt-1 bg-primary-foreground" rows="4" placeholder="Ex. React, AWS, Node."
                                     required
-                                    onChange={(event)=>setJobDesc(event.target.value)}
+                                    onChange={(event)=>setJobDesc(event.target.value.toLowerCase())}
                                 />
                             </div>
                             <div>
                                 <label className=''>Years of experience</label>
                                 <Input type="number" className="mt-1 bg-primary-foreground" max="50" placeholder="Ex. 2"
                                     required
-                                    onChange={(event)=>setExperience(event.target.value)}
+                                    onChange={(event)=>setExperience(event.target.value.toLowerCase())}
                                 />
                             </div>
                         </div>

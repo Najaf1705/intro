@@ -1,11 +1,12 @@
 "use client"
 import { UserButton } from '@clerk/nextjs'
 import Image from 'next/image'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import React from 'react'
 
 function Header() {
     const path = usePathname(); // Get the current route to apply active styles
+    const router=useRouter();
 
     return (
         <div className='flex p-4 items-center justify-between bg-secondary text-secondary-foreground shadow-primary shadow-sm'>
@@ -15,7 +16,9 @@ function Header() {
             {/* Navigation Menu */}
             <ul className='hidden md:flex gap-12 mx-2 items-center'>
                 <li className={`font-bold hover:text-tertiary hover:scale-105 cursor-pointer transition-all
-                    ${path === '/dashboard' ? 'font-bold text-tertiary' : ''}`}>
+                    ${path === '/dashboard' ? 'font-bold text-tertiary' : ''}`}
+                    onClick={()=>router.push('/dashboard')}    
+                >
                     Dashboard
                 </li>
                 <li className={`font-bold hover:text-tertiary hover:scale-105 cursor-pointer transition-all
