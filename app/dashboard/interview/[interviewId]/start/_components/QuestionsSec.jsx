@@ -7,6 +7,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel"
 import { Card, CardContent } from "@/components/ui/card"
+import { Lightbulb } from 'lucide-react';
 
 function QuestionsSec({ interviewQuestions, activeQuestionIndex, setActiveQuestionIndex }) {
   if (
@@ -62,6 +63,11 @@ function QuestionsSec({ interviewQuestions, activeQuestionIndex, setActiveQuesti
       </div>
 
       <h2 className='mt-5 text-lg font-bold'>Q{activeQuestionIndex + 1}. {interviewQuestions[activeQuestionIndex]?.question}</h2>
+
+      <div className='mt-20 p-3 text-tertiary bg-yellow-100 border border-yellow-500 rounded-md'>
+          <h2 className='flex gap-2'><Lightbulb/><strong>Information</strong></h2>
+          <h2 className='flex gap-2'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Beatae autem voluptatum impedit eligendi? Minima iste illo nobis optio sequi, officia, corrupti beatae, magni omnis reiciendis ut vero velit quibusdam accusamus?</h2>
+      </div>
     </div>
   )
 }

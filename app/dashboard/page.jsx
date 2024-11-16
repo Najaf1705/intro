@@ -10,9 +10,9 @@ function Dashboard() {
       {/* <UserButton/> */}
       <div className='grid grid-cols-1 md:grid-cols-3 my-5'>
         <AddNewInt/>
+        {/* <AddNewInt/>
         <AddNewInt/>
-        <AddNewInt/>
-        <AddNewInt/>
+        <AddNewInt/> */}
       </div>
     </div>
   )
