@@ -28,16 +28,21 @@ function StartInterview({params}) {
     }
     
   return (
-    <div>
-      <div className='grid mt-36 grid-cols-1 md:grid-cols-2 gap-10'>
-        <QuestionsSec 
-          interviewQuestions={interviewQuestions}
-          activeQuestionIndex={activeQuestionIndex}
-          setActiveQuestionIndex={setActiveQuestionIndex}
-        />
-        <RecordAnswer/>
+    <div className="min-h-screen flex flex-col items-center">
+      <div className="grid mt-36 grid-cols-1 md:grid-cols-2 gap-10 w-full">
+        <div className="self-start">
+          <QuestionsSec
+            interviewQuestions={interviewQuestions}
+            activeQuestionIndex={activeQuestionIndex}
+            setActiveQuestionIndex={setActiveQuestionIndex}
+          />
+        </div>
+        <div className="self-start">
+          <RecordAnswer />
+        </div>
       </div>
     </div>
+
   )
 }
 
