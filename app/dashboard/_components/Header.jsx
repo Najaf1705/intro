@@ -3,8 +3,12 @@ import { UserButton } from '@clerk/nextjs'
 import Image from 'next/image'
 import { usePathname, useRouter } from 'next/navigation'
 import React from 'react'
+import { useTheme } from '@/app/context/ThemeContext'
+import { MoonIcon, SunDimIcon } from 'lucide-react'
 
 function Header() {
+    const { theme, toggleTheme } = useTheme();
+
     const path = usePathname(); // Get the current route to apply active styles
     const router=useRouter();
 
@@ -35,8 +39,13 @@ function Header() {
                 </li>
             </ul>
 
-            {/* User Profile Button */}
-            <UserButton />
+            <div className='flex justify-center items-center'>
+                <button onClick={toggleTheme} className='mr-2'>
+                    {theme === "dark" ? <SunDimIcon className='text-white'/> : <MoonIcon className='text-black'/>}
+                </button>
+
+                <UserButton />
+            </div>
         </div>
     )
 }
