@@ -35,10 +35,15 @@ function StartInterview({params}) {
             interviewQuestions={interviewQuestions}
             activeQuestionIndex={activeQuestionIndex}
             setActiveQuestionIndex={setActiveQuestionIndex}
-          />
+            />
         </div>
         <div className="self-start">
-          <RecordAnswer />
+          <RecordAnswer
+            interviewData={interviewData}
+            interviewQuestions={interviewQuestions}
+            activeQuestionIndex={activeQuestionIndex}
+            setActiveQuestionIndex={setActiveQuestionIndex}
+          />
         </div>
       </div>
     </div>
