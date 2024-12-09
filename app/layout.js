@@ -2,6 +2,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeProvider } from "../app/context/ThemeContext";
+import { Toaster } from "@/components/ui/sonner";
 
 
 const geistSans = localFont({
@@ -29,6 +30,7 @@ export default function RootLayout({ children }) {
             className={`${geistSans.variable} ${geistMono.variable} antialiased`}
           >
             {children}
+            <Toaster/>
           </body>
         </html>
       </ClerkProvider>

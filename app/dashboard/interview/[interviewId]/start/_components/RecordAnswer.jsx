@@ -4,11 +4,18 @@ import { Mic, WebcamIcon } from 'lucide-react';
 import React, { useEffect, useState } from 'react'
 import Webcam from 'react-webcam'
 import useSpeechToText from 'react-hook-speech-to-text';
+import { toast } from 'sonner';
+import { chatSession } from '@/utils/geminiModel';
+import { useUser } from '@clerk/nextjs';
+import { db } from '@/utils/db';
+import moment from 'moment';
+import { UserAnswer } from '@/utils/schema';
 
 
-function RecordAnswer() {
+function RecordAnswer({interviewData, interviewQuestions, activeQuestionIndex, seAactiveQuestionIndex}) {
     const [userAnswer,setUserAnswer]=useState('');
     const [webcamEnabled,setWebcamEnabled]=useState(false);
+    const {user}=useUser();
 
     const {
         error,
@@ -17,16 +24,58 @@ function RecordAnswer() {
         results,
         startSpeechToText,
         stopSpeechToText,
-      } = useSpeechToText({
+    } = useSpeechToText({
         continuous: true,
         useLegacyResults: false
-      });
+    });
 
-      useEffect(() => {
-        results.map((result)=>{
-            setUserAnswer(prevAnswer=>prevAnswer+result?.transcript);
+    useEffect(() => {
+        console.log("useEffect.results: ",results);
+        setUserAnswer(prevAnswer => prevAnswer + results[results.length-1]?.transcript+" ");
+        
+    }, [results]);
+
+    useEffect(() => {
+        if (!isRecording && userAnswer.length >= 5) {
+            updateAnswerInDb();
+        } 
+    }, [userAnswer]);
+
+
+    const updateAnswerInDb=async()=>{
+        console.log("userAnswer: ",userAnswer);
+        const feedbackPrompt="Question: "+interviewQuestions[activeQuestionIndex]?.question+
+            ", user Answer: "+userAnswer+"give the rating for the answer and feedback on how to improve it in 3 to 4 lines."+
+            " In JSON format with rating and feedback field";
+
+        const result=await chatSession.sendMessage(feedbackPrompt);
+        const feedbackResponse=(result.response.text()).replaceAll('```json','').replaceAll('```','');
+        const jsonFeedbackResponse=JSON.parse(feedbackResponse);
+        
+        console.log("feedbackResponse: "+feedbackResponse);
+
+        const insertData=await db.insert(UserAnswer).values({
+            mockIdRef:interviewData?.mockId,
+            question:interviewQuestions[activeQuestionIndex]?.question,
+            correctAnswer:interviewQuestions[activeQuestionIndex]?.answer,
+            userAnswer:userAnswer,
+            feedback:jsonFeedbackResponse?.feedback,
+            rating:jsonFeedbackResponse?.rating,
+            userEmail:user?.primaryEmailAddress.emailAddress,
+            createdAt:moment().format('DD-MM-yyyy'),
         })
-      }, [results])
+        if(insertData){
+            const toastId = toast("User answer recorded", {
+                cancel: {
+                    label: "X",
+                    onClick: () => {
+                        toast.dismiss(toastId); // Dismiss the toast
+                    },
+                },
+            });
+        }
+        setUserAnswer("");
+    }
       
       
   return (
