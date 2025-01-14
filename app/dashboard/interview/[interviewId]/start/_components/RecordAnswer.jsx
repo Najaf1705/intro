@@ -1,6 +1,6 @@
 "use client"
 import { Button } from '@/components/ui/button';
-import { Mic, WebcamIcon } from 'lucide-react';
+import { LoaderCircle, Mic, WebcamIcon } from 'lucide-react';
 import React, { useEffect, useState } from 'react'
 import Webcam from 'react-webcam'
 import useSpeechToText from 'react-hook-speech-to-text';
@@ -12,7 +12,12 @@ import moment from 'moment';
 import { UserAnswer } from '@/utils/schema';
 
 
-function RecordAnswer({interviewData, interviewQuestions, activeQuestionIndex, seAactiveQuestionIndex}) {
+function RecordAnswer({interviewData, interviewQuestions, activeQuestionIndex, setAactiveQuestionIndex}) {
+    if (!interviewQuestions || !Array.isArray(interviewQuestions) || interviewQuestions.length === 0) {
+        return  <div width={"100%"} height={"100%"} className='flex justify-center items-center'>
+                    <LoaderCircle className='mr-1 animate-spin'/>
+                </div>
+    }
     const [userAnswer,setUserAnswer]=useState('');
     const [webcamEnabled,setWebcamEnabled]=useState(false);
     const {user}=useUser();
@@ -30,9 +35,12 @@ function RecordAnswer({interviewData, interviewQuestions, activeQuestionIndex, s
     });
 
     useEffect(() => {
-        console.log("useEffect.results: ",results);
-        setUserAnswer(prevAnswer => prevAnswer + results[results.length-1]?.transcript+" ");
-        
+        if (results && results.length > 0) {
+            const latestResult = results[results.length - 1]?.transcript || '';
+            if (latestResult.trim()) {
+                setUserAnswer((prevAnswer) => prevAnswer + latestResult + ' ');
+            }
+        }
     }, [results]);
 
     useEffect(() => {
