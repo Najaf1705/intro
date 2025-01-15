@@ -10,13 +10,22 @@ import { useUser } from '@clerk/nextjs';
 import { db } from '@/utils/db';
 import moment from 'moment';
 import { UserAnswer } from '@/utils/schema';
+import { Skeleton } from "@/components/ui/skeleton"
+
 
 
 function RecordAnswer({interviewData, interviewQuestions, activeQuestionIndex, setAactiveQuestionIndex}) {
     if (!interviewQuestions || !Array.isArray(interviewQuestions) || interviewQuestions.length === 0) {
-        return  <div width={"100%"} height={"100%"} className='flex justify-center items-center'>
-                    <LoaderCircle className='mr-1 animate-spin'/>
+        return (
+            <div className="flex flex-col justify-center items-center gap-4">
+                <Skeleton className="h-72 w-[65%] rounded-lg" /> {/* Webcam Skeleton */}
+                <div className="flex justify-evenly flex-wrap w-full gap-1">
+                    <Skeleton className="h-12 w-40 rounded-lg" /> {/* Button Skeleton 1 */}
+                    <Skeleton className="h-12 w-40 rounded-lg" /> {/* Button Skeleton 2 */}
+                    <Skeleton className="h-12 w-40 rounded-lg" /> {/* Button Skeleton 3 */}
                 </div>
+            </div>
+        );
     }
     const [userAnswer,setUserAnswer]=useState('');
     const [webcamEnabled,setWebcamEnabled]=useState(false);
@@ -100,7 +109,7 @@ function RecordAnswer({interviewData, interviewQuestions, activeQuestionIndex, s
                 <WebcamIcon width={'65%'} height={300} className='p-20 bg-secondary rounded-lg border' />
             )}
         </div>
-        <div className='p-2 flex justify-evenly'>
+        <div className='p-2 flex justify-evenly flex-wrap'>
             <Button variant="outline" className='my-2 font-bold'
                 onClick={isRecording?stopSpeechToText:startSpeechToText}>
                   {isRecording ? (

@@ -1,12 +1,14 @@
 "use client";
-import { UserButton } from "@clerk/nextjs";
+import { UserButton, useUser } from "@clerk/nextjs";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
 import { useTheme } from "@/app/context/ThemeContext";
 import { MoonIcon, SunDimIcon, MenuIcon, XIcon } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 function Header() {
+    const { isLoaded } = useUser(); 
     const { theme, toggleTheme } = useTheme();
     const [menuOpen, setMenuOpen] = useState(false); // State for menu toggle
     const menuRef = useRef(null); // Ref to track the menu element
@@ -49,7 +51,7 @@ function Header() {
             {/* Navigation Menu */}
             <ul
                 ref={menuRef}
-                className={`fixed top-0 left-0 h-full w-2/5 bg-secondary text-secondary-foreground z-50 transform transition-transform duration-300 ease-in-out ${
+                className={`fixed top-0 left-0 h-full w-3/4 bg-secondary text-secondary-foreground z-50 transform transition-transform duration-300 ease-in-out ${
                 menuOpen ? "translate-x-0 flex flex-col justify-center gap-8 p-8" : "-translate-x-full"
                 } md:static md:flex md:gap-8 md:mx-auto md:justify-center md:items-center md:transform-none md:w-auto md:h-auto`}
             >
@@ -83,7 +85,11 @@ function Header() {
                         <MoonIcon className="text-black" />
                     )}
                 </button>
-                <UserButton />
+                {!isLoaded ? (
+                    <Skeleton className="h-8 w-8 rounded-full" />
+                ) : (
+                    <UserButton />
+                )}
             </div>
         </div>
     );
