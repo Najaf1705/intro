@@ -28,7 +28,7 @@ function StartInterview({params}) {
     }
     
   return (
-    <div className="min-h-screen flex flex-col items-center">
+    <div className="min-h-auto flex flex-col items-center mb-4">
       <div className="grid mt-36 grid-cols-1 md:grid-cols-2 gap-10 w-full">
         <div className="self-start">
           <QuestionsSec

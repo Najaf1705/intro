@@ -76,8 +76,12 @@ function AddNewInt() {
         >
             <h2 className='text-lg text-center'>+ Add New</h2>
         </div>
-        <Dialog open={openDialog}>
-            <DialogContent className="bg-secondary text-secondary-foreground">
+        <Dialog open={openDialog} onOpenChange={setOpenDialog}>
+            <DialogContent className="bg-secondary text-secondary-foreground 
+                   sm:max-w-lg sm:rounded-lg 
+                   w-11/12 h-auto md:h-auto 
+                   fixed sm:relative sm:top-auto 
+                   overflow-x-auto p-4 sm:p-6">
                 <DialogHeader>
                 <DialogTitle>Tell us more about the job</DialogTitle>
                 <DialogDescription className="text-secondary-foreground">
