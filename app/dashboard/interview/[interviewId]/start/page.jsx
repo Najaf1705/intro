@@ -2,14 +2,15 @@
 import { db } from '@/utils/db';
 import { MockInterview } from '@/utils/schema';
 import { eq } from 'drizzle-orm';
-import React, { useEffect, useState } from 'react'
-import QuestionsSec from './_components/QuestionsSec';
-import RecordAnswer from './_components/RecordAnswer';
+import React, { act, useEffect, useState } from 'react'
+import QuestionsSec from './QuestionsSec';
+import RecordAnswer from './RecordAnswer';
+import { Button } from '@/components/ui/button';
 
 function StartInterview({params}) {
 
     const [interviewData,setInterviewData]=useState();
-    const [interviewQuestions,setInterviewQuestions]=useState();
+    const [interviewQuestions,setInterviewQuestions]=useState([]);
     const [activeQuestionIndex,setActiveQuestionIndex]=useState(0);
 
     useEffect(() => {
@@ -46,6 +47,21 @@ function StartInterview({params}) {
           />
         </div>
       </div>
+      {/* <div className='flex justify-end w-full gap-6 mt-6'>
+        <Button
+          disabled={activeQuestionIndex <= 0} // Disable if at the first question
+          onClick={() => setActiveQuestionIndex(activeQuestionIndex - 1)}
+        >
+          Previous Question
+        </Button>
+        <Button
+          disabled={activeQuestionIndex >= interviewQuestions.length - 1} // Disable if at the last question
+          onClick={() => setActiveQuestionIndex(activeQuestionIndex + 1)}
+        >
+          Next Question
+        </Button>
+        <Button>End Interview</Button>
+      </div> */}
     </div>
 
   )

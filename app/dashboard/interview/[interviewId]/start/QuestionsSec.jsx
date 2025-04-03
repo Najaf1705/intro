@@ -1,16 +1,17 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react';
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from "@/components/ui/carousel"
-import { Card, CardContent } from "@/components/ui/card"
+} from "@/components/ui/carousel";
+import { Card, CardContent } from "@/components/ui/card";
 import { Lightbulb, LoaderCircle, Volume2 } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 
 function QuestionsSec({ interviewQuestions, activeQuestionIndex, setActiveQuestionIndex }) {
+  const itemRefs = useRef([]); // Create refs for each CarouselItem
 
   const textToSpeech = (text) => {
     if ('speechSynthesis' in window) {
@@ -19,7 +20,18 @@ function QuestionsSec({ interviewQuestions, activeQuestionIndex, setActiveQuesti
     } else {
       console.log("Sorry, can't speak.");
     }
-  }
+  };
+
+  // Scroll to the active question
+  useEffect(() => {
+    if (itemRefs.current[activeQuestionIndex]) {
+      itemRefs.current[activeQuestionIndex].scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+        inline: 'center',
+      });
+    }
+  }, [activeQuestionIndex]);
 
   // If data is not ready, show a loading screen
   if (
@@ -68,6 +80,7 @@ function QuestionsSec({ interviewQuestions, activeQuestionIndex, setActiveQuesti
             {interviewQuestions && interviewQuestions.map((ques, index) => (
               <CarouselItem
                 key={index}
+                ref={(el) => (itemRefs.current[index] = el)} // Assign ref to each item
                 className={`flex-shrink-0 sm:basis-1/3 lg:basis-1/3 p-1`}
               >
                 <div className="w-16 h-16 mx-auto"> {/* Adjusted size for better responsiveness */}
@@ -103,7 +116,7 @@ function QuestionsSec({ interviewQuestions, activeQuestionIndex, setActiveQuesti
         <h2 className='flex gap-2'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Beatae autem voluptatum impedit eligendi? Minima iste illo nobis optio sequi, officia, corrupti beatae, magni omnis reiciendis ut vero velit quibusdam accusamus?</h2>
       </div>
     </div>
-  )
+  );
 }
 
-export default QuestionsSec
+export default QuestionsSec;

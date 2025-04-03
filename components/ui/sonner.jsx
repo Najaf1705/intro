@@ -1,7 +1,7 @@
 "use client";
 
 import { Toaster as Sonner } from "sonner"; // Import Sonner toaster library
-import { useTheme } from "../../app/context/ThemeContext";  // Import the custom ThemeContext
+import { useTheme } from "../../context/ThemeContext";  // Import the custom ThemeContext
 
 const Toaster = ({
   ...props // Spread props for flexibility
