@@ -11,10 +11,11 @@ import { db } from '@/utils/db';
 import moment from 'moment';
 import { UserAnswer } from '@/utils/schema';
 import { Skeleton } from "@/components/ui/skeleton"
+import Link from 'next/link';
 
 
 
-function RecordAnswer({interviewData, interviewQuestions, activeQuestionIndex, setAactiveQuestionIndex}) {
+function RecordAnswer({interviewData, interviewQuestions, activeQuestionIndex, setActiveQuestionIndex}) {
     if (!interviewQuestions || !Array.isArray(interviewQuestions) || interviewQuestions.length === 0) {
         return (
             <div className="flex flex-col justify-center items-center gap-4">
@@ -109,7 +110,7 @@ function RecordAnswer({interviewData, interviewQuestions, activeQuestionIndex, s
                 <WebcamIcon width={'65%'} height={300} className='p-20 bg-secondary rounded-lg border' />
             )}
         </div>
-        <div className='p-2 flex justify-evenly flex-wrap'>
+        <div className='p-2 flex justify-center flex-wrap gap-6'>
             <Button variant="outline" className='my-2 font-bold'
                 onClick={isRecording?stopSpeechToText:startSpeechToText}>
                   {isRecording ? (
@@ -121,9 +122,29 @@ function RecordAnswer({interviewData, interviewQuestions, activeQuestionIndex, s
                       'Record Response'
                   )}
             </Button>
-            <Button onClick={()=>console.log(userAnswer)}>show answer</Button>
+            {/* <Button onClick={()=>console.log(userAnswer)}>show answer</Button> */}
             <Button onClick={() => setWebcamEnabled(!webcamEnabled)} className='my-2 font-bold'>{webcamEnabled?"Turn off webcam":"Turn on webcam"}</Button>
+        </div>
+        <div className='flex justify-center flex-wrap w-full gap-6 mt-6'>
+            <Button
+                disabled={activeQuestionIndex <= 0} // Disable if at the first question
+                onClick={() => setActiveQuestionIndex(activeQuestionIndex - 1)}
+            >
+                Previous Question
+            </Button>
 
+            {activeQuestionIndex < interviewQuestions.length - 1 &&
+                <Button
+                    onClick={() => setActiveQuestionIndex(activeQuestionIndex + 1)}
+                >
+                    Next Question
+                </Button>
+            }
+            {activeQuestionIndex===interviewQuestions.length - 1 &&
+                <Link href={`/dashboard/interview/${interviewData?.mockId}/feedback`}>
+                    <Button className='bg-tertiary text-primary font-semibold hover:bg-secbackground'>End Interview</Button>
+                </Link>
+            }
         </div>
     </div>
   )

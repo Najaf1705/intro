@@ -14,6 +14,8 @@ function Interview({ params }) {
     const [webcamEnabled, setWebcamEnabled] = useState(false); // Webcam state
     const [loading, setLoading] = useState(true); // Loading state
 
+    console.log(params); // Log the params to check the interviewId
+
     useEffect(() => {
         getInterviewDetails();
     }, []);
