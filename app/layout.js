@@ -1,19 +1,15 @@
 import localFont from "next/font/local";
+import { Quicksand } from "next/font/google"; // Import Quicksand
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { Toaster } from "@/components/ui/sonner";
 
-
-const geistSans = localFont({
-  src: "../fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "../fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
+// Define Quicksand font from Google Fonts
+const quicksand = Quicksand({
+  subsets: ["latin"], // Required: specify the character subset
+  weight: ["300", "400", "500", "600", "700"], // Specify weights you want
+  variable: "--font-quicksand", // Optional: CSS variable for flexibility
 });
 
 export const metadata = {
@@ -27,10 +23,10 @@ export default function RootLayout({ children }) {
       <ClerkProvider>
         <html lang="en">
           <body
-            className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+            className={`${quicksand.variable} antialiased`}
           >
             {children}
-            <Toaster/>
+            <Toaster />
           </body>
         </html>
       </ClerkProvider>

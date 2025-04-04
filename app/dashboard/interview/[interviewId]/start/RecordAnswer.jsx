@@ -39,6 +39,7 @@ function RecordAnswer({interviewData, interviewQuestions, activeQuestionIndex, s
         results,
         startSpeechToText,
         stopSpeechToText,
+        setResults
     } = useSpeechToText({
         continuous: true,
         useLegacyResults: false
@@ -91,8 +92,10 @@ function RecordAnswer({interviewData, interviewQuestions, activeQuestionIndex, s
                     },
                 },
             });
+            setResults([]); // Clear the results after saving to the database
+            setUserAnswer(""); // Clear the user answer
         }
-        setUserAnswer("");
+        setUserAnswer
     }
       
       
@@ -142,7 +145,7 @@ function RecordAnswer({interviewData, interviewQuestions, activeQuestionIndex, s
             }
             {activeQuestionIndex===interviewQuestions.length - 1 &&
                 <Link href={`/dashboard/interview/${interviewData?.mockId}/feedback`}>
-                    <Button className='bg-tertiary text-primary font-semibold hover:bg-secbackground'>End Interview</Button>
+                    <Button className='bg-tertiary text-white font-semibold hover:bg-gray-600'>End Interview</Button>
                 </Link>
             }
         </div>
