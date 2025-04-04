@@ -15,6 +15,8 @@ function Interview({ params }) {
     const [loading, setLoading] = useState(true); // Loading state
 
     console.log(params); // Log the params to check the interviewId
+    // console.log(params.inteviewId);
+
 
     useEffect(() => {
         getInterviewDetails();
