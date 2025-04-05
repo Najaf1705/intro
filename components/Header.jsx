@@ -29,7 +29,7 @@ function Header() {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [menuOpen]); // Only re-run when menuOpen changes
+  }, [menuOpen]);
 
   // Navigation items array
   const navItems = [
@@ -75,7 +75,7 @@ function Header() {
           ref={menuRef}
           className={`fixed top-0 left-0 h-full w-3/4 bg-secondary text-secondary-foreground z-50 transform transition-transform duration-300 ease-in-out ${
             menuOpen ? "translate-x-0" : "-translate-x-full"
-          } md:static md:flex md:gap-8 md:mx-auto md:justify-center md:items-center md:transform-none md:w-auto md:h-auto`}
+          }  md:static md:flex md:gap-8 md:mx-auto md:justify-center md:items-center md:transform-none md:w-auto md:h-auto`}
         >
           {navItems.map(({ path: linkPath, label }) => (
             <li

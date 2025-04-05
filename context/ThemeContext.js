@@ -1,18 +1,21 @@
-"use client"
+"use client";
 import { createContext, useState, useEffect, useContext } from "react";
 
 const ThemeContext = createContext();
 
 export function ThemeProvider({ children }) {
   const [theme, setTheme] = useState("light");
+  const [loading, setLoading] = useState(true);
 
-  // Load saved theme from localStorage or system preference
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme") || "light";
     setTheme(savedTheme);
     if (savedTheme === "dark") {
       document.documentElement.classList.add("dark-theme");
+    } else {
+      document.documentElement.classList.remove("dark-theme");
     }
+    setLoading(false);
   }, []);
 
   const toggleTheme = () => {
@@ -20,21 +23,26 @@ export function ThemeProvider({ children }) {
     setTheme(newTheme);
     localStorage.setItem("theme", newTheme);
 
-    // Toggle the class on the root element
     if (newTheme === "dark") {
       document.documentElement.classList.add("dark-theme");
+      document.documentElement.classList.remove("light-theme");
     } else {
+      document.documentElement.classList.add("light-theme");
       document.documentElement.classList.remove("dark-theme");
     }
   };
 
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+    <ThemeContext.Provider value={{ theme, toggleTheme, loading }}>
       {children}
     </ThemeContext.Provider>
   );
 }
 
 export function useTheme() {
-  return useContext(ThemeContext);
+  const context = useContext(ThemeContext);
+  if (!context) {
+    throw new Error("useTheme must be used within a ThemeProvider");
+  }
+  return context;
 }

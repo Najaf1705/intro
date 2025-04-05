@@ -1,6 +1,5 @@
 "use client"
 import { db } from '@/utils/db'
-import { cn } from "@/lib/utils"
 import { UserAnswer } from '@/utils/schema'
 import { eq } from 'drizzle-orm'
 import React, { useEffect, useState, useRef } from 'react'
@@ -12,8 +11,11 @@ import {
 import { ChevronDown, ChevronUp } from 'lucide-react'
 import Confetti from 'react-confetti'
 import { Skeleton } from '@/components/ui/skeleton' // Import Skeleton component
+import { useRouter } from 'next/navigation'
 
 function Feedback({ params }) {
+  const router = useRouter();
+
   const [feedbackList, setFeedbackList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showConfetti, setShowConfetti] = useState(false); // Confetti will show only after loading
@@ -169,7 +171,9 @@ function Feedback({ params }) {
           </div>
 
           <div className='flex flex-wrap justify-center lg:justify-end  gap-6 mt-10'>
-            <button className='bg-tertiary text-white font-semibold hover:bg-slate-500 px-6 py-2 rounded-md'>Go to Dashboard</button>
+            <button className='bg-tertiary text-white font-semibold hover:bg-slate-500 px-6 py-2 rounded-md'
+              onClick={() => router.replace("/dashboard")}
+            >Go to Dashboard</button>
             <button className='bg-tertiary text-white font-semibold hover:bg-slate-500 px-6 py-2 rounded-md'>Download Feedback</button>
             <button className='bg-tertiary text-white font-semibold hover:bg-slate-500 px-6 py-2 rounded-md'>Share Feedback</button>
           </div>
