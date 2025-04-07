@@ -4,7 +4,6 @@ import { LoaderCircle, Mic, WebcamIcon } from 'lucide-react';
 import React, { useEffect, useState } from 'react'
 import Webcam from 'react-webcam'
 import useSpeechToText from 'react-hook-speech-to-text';
-import { toast } from 'sonner';
 import { chatSession } from '@/utils/geminiModel';
 import { useUser } from '@clerk/nextjs';
 import { db } from '@/utils/db';
@@ -12,25 +11,36 @@ import moment from 'moment';
 import { UserAnswer } from '@/utils/schema';
 import { Skeleton } from "@/components/ui/skeleton"
 import Link from 'next/link';
-
+import { useToast } from '@/hooks/use-toast';
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"; // Import your dialog component
+import { useRouter } from 'next/navigation';
 
 
 function RecordAnswer({interviewData, interviewQuestions, activeQuestionIndex, setActiveQuestionIndex}) {
-    if (!interviewQuestions || !Array.isArray(interviewQuestions) || interviewQuestions.length === 0) {
+    if (
+        // true || 
+        !interviewQuestions || 
+        !Array.isArray(interviewQuestions) || 
+        interviewQuestions.length === 0) {
         return (
-            <div className="flex flex-col justify-center items-center gap-4">
+            <div className="flex flex-col justify-center items-center gap-6">
                 <Skeleton className="h-72 w-[65%] rounded-lg" /> {/* Webcam Skeleton */}
-                <div className="flex justify-evenly flex-wrap w-full gap-1">
+                <div className="flex justify-evenly flex-wrap w-full gap-4">
                     <Skeleton className="h-12 w-40 rounded-lg" /> {/* Button Skeleton 1 */}
                     <Skeleton className="h-12 w-40 rounded-lg" /> {/* Button Skeleton 2 */}
                     <Skeleton className="h-12 w-40 rounded-lg" /> {/* Button Skeleton 3 */}
                 </div>
+                <Skeleton className="h-6 w-1/2 rounded-lg" /> {/* Text Skeleton */}
             </div>
         );
     }
     const [userAnswer,setUserAnswer]=useState('');
     const [webcamEnabled,setWebcamEnabled]=useState(false);
+    const [isDialogOpen, setIsDialogOpen] = useState(false); // State to control dialog visibility
+    
     const {user}=useUser();
+    const { toast } = useToast();
+    const router = useRouter();
 
     const {
         error,
@@ -84,19 +94,26 @@ function RecordAnswer({interviewData, interviewQuestions, activeQuestionIndex, s
             createdAt:moment().format('DD-MM-yyyy'),
         })
         if(insertData){
-            const toastId = toast("User answer recorded", {
-                cancel: {
-                    label: "X",
-                    onClick: () => {
-                        toast.dismiss(toastId); // Dismiss the toast
-                    },
-                },
-            });
+            toast({
+                variant: 'success',
+                title: 'Answer saved successfully!',
+            })
             setResults([]); // Clear the results after saving to the database
             setUserAnswer(""); // Clear the user answer
         }
         setUserAnswer
     }
+
+    const handleEndInterview = () => {
+        setIsDialogOpen(true); // Open the dialog
+    };
+
+    const confirmEndInterview = () => {
+        setIsDialogOpen(false); // Close the dialog
+        // Redirect to feedback page
+        
+        router.push(`/dashboard/interview/${interviewData?.mockId}/feedback`);
+    };
       
       
   return (
@@ -129,7 +146,7 @@ function RecordAnswer({interviewData, interviewQuestions, activeQuestionIndex, s
             <Button onClick={() => setWebcamEnabled(!webcamEnabled)} className='my-2 font-bold'>{webcamEnabled?"Turn off webcam":"Turn on webcam"}</Button>
         </div>
         <div className='flex justify-center flex-wrap w-full gap-6 mt-6'>
-            <Button
+            <Button className="font-bold"
                 disabled={activeQuestionIndex <= 0} // Disable if at the first question
                 onClick={() => setActiveQuestionIndex(activeQuestionIndex - 1)}
             >
@@ -137,18 +154,41 @@ function RecordAnswer({interviewData, interviewQuestions, activeQuestionIndex, s
             </Button>
 
             {activeQuestionIndex < interviewQuestions.length - 1 &&
-                <Button
+                <Button className="font-bold"
                     onClick={() => setActiveQuestionIndex(activeQuestionIndex + 1)}
                 >
                     Next Question
                 </Button>
             }
             {activeQuestionIndex===interviewQuestions.length - 1 &&
-                <Link href={`/dashboard/interview/${interviewData?.mockId}/feedback`}>
-                    <Button className='bg-tertiary text-white font-semibold hover:bg-gray-600'>End Interview</Button>
-                </Link>
+                <Button
+                    className='bg-tertiary text-white font-semibold hover:bg-gray-600'
+                    onClick={handleEndInterview}
+                >
+                    End Interview
+                </Button>
             }
         </div>
+
+        {/* Confirmation Dialog */}
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <DialogContent className="bg-secondary text-secondary-foreground">
+                <DialogHeader>
+                    <DialogTitle>End Interview</DialogTitle>
+                    <DialogDescription>
+                        Are you sure you want to end the interview? You won't be able to return to this session.
+                    </DialogDescription>
+                </DialogHeader>
+                <DialogFooter>
+                    <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
+                        Cancel
+                    </Button>
+                    <Button variant="tertiary" onClick={confirmEndInterview}>
+                        Confirm
+                    </Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
     </div>
   )
 }

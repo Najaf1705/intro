@@ -35,6 +35,7 @@ function QuestionsSec({ interviewQuestions, activeQuestionIndex, setActiveQuesti
 
   // If data is not ready, show a loading screen
   if (
+    // true ||
     !interviewQuestions || 
     activeQuestionIndex === null || 
     activeQuestionIndex < 0 || 
@@ -105,10 +106,11 @@ function QuestionsSec({ interviewQuestions, activeQuestionIndex, setActiveQuesti
 
       <h2 className='mt-5 text-lg font-bold'>Q{activeQuestionIndex + 1}. {interviewQuestions[activeQuestionIndex]?.question}</h2>
 
-      <div className='cursor-pointer pt-2 flex text-tertiary'
-        onClick={() => textToSpeech(interviewQuestions[activeQuestionIndex]?.question)}>
+      <div className='pt-2 flex text-tertiary'>
         <Volume2 />
-        <span className='ml-1'>Hear Question</span>
+        <span className='ml-1 cursor-pointer' onClick={() => textToSpeech(interviewQuestions[activeQuestionIndex]?.question)}>
+          Hear Question
+        </span>
       </div>
 
       <div className='mt-10 p-3 text-tertiary bg-yellow-100 border border-yellow-500 rounded-md'>

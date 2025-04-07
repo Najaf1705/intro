@@ -5,22 +5,28 @@ import { eq } from 'drizzle-orm';
 import React, { act, useEffect, useState } from 'react'
 import QuestionsSec from './QuestionsSec';
 import RecordAnswer from './RecordAnswer';
-import { Button } from '@/components/ui/button';
+import { useSelector } from 'react-redux';
 
 function StartInterview({params}) {
 
-    const [interviewData,setInterviewData]=useState();
-    const [interviewQuestions,setInterviewQuestions]=useState([]);
-    const [activeQuestionIndex,setActiveQuestionIndex]=useState(0);
+  const currentInterviewDetail = useSelector(
+    (state) => state.currentInterviewDetail.data
+  );
+
+  const [interviewData,setInterviewData]=useState();
+  const [interviewQuestions,setInterviewQuestions]=useState([]);
+  const [activeQuestionIndex,setActiveQuestionIndex]=useState(0);
+
 
     useEffect(() => {
-      console.log(params);
+      console.log("Interview ID:", params.interviewId); // Log the interviewId
+      console.log("Params: ",params);
       getInterviewDetails();
     }, []);
 
     const getInterviewDetails=async()=>{
       const details=await db.select().from(MockInterview)
-      .where(eq(params.interviewId,MockInterview.mockId))
+      .where(eq(currentInterviewDetail.mockId,MockInterview.mockId))
       console.log(details);
       setInterviewData(details[0]);
       // setInterviewQuestions(JSON.parse(details[0]?.jsonMockResponse));
@@ -30,7 +36,7 @@ function StartInterview({params}) {
     
   return (
     <div className="min-h-auto flex flex-col items-center mb-4">
-      <div className="grid mt-36 grid-cols-1 md:grid-cols-2 gap-10 w-full">
+      <div className="grid mt-24 grid-cols-1 md:grid-cols-2 gap-10 w-full">
         <div className="self-start">
           <QuestionsSec
             interviewQuestions={interviewQuestions}
@@ -47,21 +53,6 @@ function StartInterview({params}) {
           />
         </div>
       </div>
-      {/* <div className='flex justify-end w-full gap-6 mt-6'>
-        <Button
-          disabled={activeQuestionIndex <= 0} // Disable if at the first question
-          onClick={() => setActiveQuestionIndex(activeQuestionIndex - 1)}
-        >
-          Previous Question
-        </Button>
-        <Button
-          disabled={activeQuestionIndex >= interviewQuestions.length - 1} // Disable if at the last question
-          onClick={() => setActiveQuestionIndex(activeQuestionIndex + 1)}
-        >
-          Next Question
-        </Button>
-        <Button>End Interview</Button>
-      </div> */}
     </div>
 
   )

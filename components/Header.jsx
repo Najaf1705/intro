@@ -1,15 +1,15 @@
+// filepath: d:\prjs\intro\components\Header.jsx
 "use client";
 import { UserButton, useUser } from "@clerk/nextjs";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
-import { useTheme } from "@/context/ThemeContext";
-import { MoonIcon, SunDimIcon, MenuIcon, XIcon } from "lucide-react";
+import { MenuIcon, XIcon } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
+import ThemeSwitch from "@/components/ThemeSwitch";
 
 function Header() {
   const { isLoaded } = useUser();
-  const { theme, toggleTheme } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
   const path = usePathname();
@@ -73,7 +73,7 @@ function Header() {
       <nav>
         <ul
           ref={menuRef}
-          className={`fixed top-0 left-0 h-full w-3/4 bg-secondary text-secondary-foreground z-50 transform transition-transform duration-300 ease-in-out ${
+          className={`fixed top-0 left-0 h-full w-3/4 bg-secondary text-secondary-foreground z-50 transform transition-transform duration-300 ease-in-out overflow-hidden ${
             menuOpen ? "translate-x-0" : "-translate-x-full"
           }  md:static md:flex md:gap-8 md:mx-auto md:justify-center md:items-center md:transform-none md:w-auto md:h-auto`}
         >
@@ -91,19 +91,9 @@ function Header() {
         </ul>
       </nav>
 
-      {/* Theme Toggle and User */}
+      {/* Theme Switch and User */}
       <div className="flex items-center gap-2">
-        <button
-          onClick={toggleTheme}
-          className="p-1 hover:opacity-75 transition-opacity"
-          aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
-        >
-          {theme === "dark" ? (
-            <SunDimIcon className="text-white" size={24} />
-          ) : (
-            <MoonIcon className="text-black" size={24} />
-          )}
-        </button>
+        <ThemeSwitch />
         {!isLoaded ? (
           <Skeleton className="h-8 w-8 rounded-full" />
         ) : (
