@@ -36,7 +36,7 @@ function StartInterview({params}) {
     
   return (
     <div className="min-h-auto flex flex-col items-center mb-4">
-      <div className="grid mt-24 grid-cols-1 md:grid-cols-2 gap-10 w-full">
+      <div className="grid mt-12 grid-cols-1 md:grid-cols-2 gap-10 w-full">
         <div className="self-start">
           <QuestionsSec
             interviewQuestions={interviewQuestions}

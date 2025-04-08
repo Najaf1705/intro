@@ -7,6 +7,7 @@ import { ThemeProviders } from "@/app/themeProvider"; // Import your theme provi
 import { Toaster } from "@/components/ui/toaster"
 import { Provider } from "react-redux";
 import { makeStore } from "@/redux/store";
+import Header from "@/components/Header";
 
 // Define Quicksand font from Google Fonts
 const quicksand = Quicksand({
@@ -26,6 +27,7 @@ export default function RootLayout({ children }) {
         <Provider store={store}>
           <ThemeProviders>
             <ClerkProvider>
+              <Header/>
               <div className="flex-grow">{children}</div>
               <footer className="text-center text-sm font-bold mt-auto">
                 © {new Date().getFullYear()}{" "}

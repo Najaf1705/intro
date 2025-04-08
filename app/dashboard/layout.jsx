@@ -3,12 +3,9 @@ import Header from '@/components/Header'
 
 function DashboardLayout({children}) {
   return (
-    <>
-      <Header/>
-      <div className='mx-5 md:mx-10 lg:mx-20'>
-        {children}
-      </div>
-    </>
+    <div className='mx-5 mt-24 md:mx-10 lg:mx-20'>
+      {children}
+    </div>
   )
 }
 
