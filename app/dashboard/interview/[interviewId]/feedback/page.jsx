@@ -62,7 +62,7 @@ function Feedback({ params }) {
   };
 
   return (
-    <div className='py-14'>
+    <div className='py-6'>
       {/* Show confetti only after loading is complete */}
       {showConfetti && (
         <Confetti

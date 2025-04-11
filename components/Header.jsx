@@ -73,7 +73,7 @@ function Header() {
 
   return (
     <header
-      className={`flex p-4 items-center justify-between bg-secondary text-secondary-foreground shadow-primary shadow-sm fixed w-full top-0 left-0 z-50 transition-transform duration-300 ${
+      className={`flex px-4 md:px-10 py-3 items-center justify-between bg-secondary text-secondary-foreground shadow-primary shadow-sm fixed w-full top-0 left-0 z-50 transition-transform duration-300 ${
         visible ? "translate-y-0" : "-translate-y-full"
       }`}
     >
@@ -110,8 +110,8 @@ function Header() {
           {navItems.map(({ path: linkPath, label }) => (
             <li
               key={label}
-              className={`font-bold text-lg hover:text-tertiary hover:scale-105 cursor-pointer transition-all duration-200 p-4 md:p-0 ${
-                path === linkPath ? "text-tertiary" : ""
+              className={`text-lg hover:text-tertiary hover:scale-105 cursor-pointer transition-all duration-200 p-4 md:p-0 ${
+                path === linkPath ? "text-tertiary font-bold" : "font-normal"
               }`}
               onClick={() => handleNavClick(linkPath)}
             >

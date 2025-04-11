@@ -15,6 +15,7 @@ import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { updateCurrentInterviewDetail } from "@/redux/features/currentInterviewDetailSlice";
+import { useToast } from "@/hooks/use-toast";
 
 function AddNewInt() {
   const router = useRouter();
@@ -23,11 +24,19 @@ function AddNewInt() {
   const [jobDesc, setJobDesc] = useState("");
   const [experience, setExperience] = useState("");
   const [loading, setLoading] = useState(false);
-
+  
   const dispatch = useDispatch();
-  const { user } = useUser();
+  const { user, isSignedIn } = useUser();
+  const { toast } = useToast();
 
   const submitForm = async (e) => {
+    if(!isSignedIn) {
+      toast({
+        variant: "info",
+        title: "You need to login first.",
+      })
+      return;
+    }
     e.preventDefault();
     setLoading(true);
 
@@ -40,7 +49,7 @@ function AddNewInt() {
     );
 
     router.push("/dashboard/startInterview");
-    setLoading(false);
+    // setLoading(false);
   };
 
   return (

@@ -42,7 +42,7 @@ function QuestionsSec({ interviewQuestions, activeQuestionIndex, setActiveQuesti
     activeQuestionIndex >= interviewQuestions.length
   ) {
     return (
-      <div className="p-5 border rounded-lg">
+      <div className="backdrop-blur-sm p-5 border rounded-lg">
         <div className="w-full flex justify-center">
           {/* Carousel Skeleton */}
           <Skeleton className="h-16 w-[75%] rounded-md" />
@@ -69,7 +69,7 @@ function QuestionsSec({ interviewQuestions, activeQuestionIndex, setActiveQuesti
   }
 
   return (
-    <div className='p-5 border rounded-lg'>
+    <div className='backdrop-blur-sm p-5 border rounded-lg'>
       <div className='w-full flex justify-center'> {/* Centering the carousel */}
         <Carousel
           opts={{
