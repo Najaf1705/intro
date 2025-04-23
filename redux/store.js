@@ -1,5 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import currentInterviewDetailReducer from './features/currentInterviewDetailSlice';
+import userPreviousIntsReducer from './features/userPreviousIntsSlice'; // <-- Add this line
 
 // Load state from localStorage
 const loadState = () => {
@@ -28,6 +29,7 @@ export const makeStore = () => {
   const store = configureStore({
     reducer: {
       currentInterviewDetail: currentInterviewDetailReducer,
+      userPreviousInts: userPreviousIntsReducer, // <-- Add this line
     },
     preloadedState, // Use the loaded state
   });

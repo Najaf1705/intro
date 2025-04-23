@@ -10,15 +10,43 @@ import {
 } from "@/components/ui/collapsible"
 import { ChevronDown, ChevronUp } from 'lucide-react'
 import Confetti from 'react-confetti'
-import { Skeleton } from '@/components/ui/skeleton' // Import Skeleton component
-import { useRouter } from 'next/navigation'
+import { Skeleton } from '@/components/ui/skeleton'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 function Feedback({ params }) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // Parse query parameters
+  const initialShowConfetti = searchParams.get('showCongrats') === 'true';
+  const showCongrats = searchParams.get('showCongrats') === 'true';
+  const interviewDetails = {
+    jobPosition: searchParams.get('jobPosition'),
+    jobExperience: searchParams.get('jobExperience'),
+    createdAt: searchParams.get('createdAt'),
+  };
 
   const [feedbackList, setFeedbackList] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [showConfetti, setShowConfetti] = useState(false); // Confetti will show only after loading
+  const [showConfetti, setShowConfetti] = useState(initialShowConfetti);
+  const [confettiVisible, setConfettiVisible] = useState(initialShowConfetti); // controls rendering
+  const [confettiOpacity, setConfettiOpacity] = useState(1);
+
+  useEffect(() => {
+    if (initialShowConfetti) {
+      setConfettiVisible(true);
+      setConfettiOpacity(1);
+      // Start fade out after 2.5s, then hide after 3s
+      const fadeTimeout = setTimeout(() => setConfettiOpacity(0), 4000);
+      const hideTimeout = setTimeout(() => setConfettiVisible(false), 5000);
+      return () => {
+        clearTimeout(fadeTimeout);
+        clearTimeout(hideTimeout);
+      };
+    } else {
+      setConfettiVisible(false);
+    }
+  }, [initialShowConfetti]);
   const feedbackRefs = useRef([]); // Create refs for each feedback item
 
   useEffect(() => {
@@ -38,9 +66,8 @@ function Feedback({ params }) {
     // Show confetti after loading is complete
     setShowConfetti(true);
 
-    // Stop confetti after 5 seconds
-    const timer = setTimeout(() => setShowConfetti(false), 3000);
-    return () => clearTimeout(timer);
+    // Stop confetti after 3 seconds
+    setTimeout(() => setShowConfetti(false), 3000);
   };
 
   const handleOpenChange = (isOpen, index) => {
@@ -63,14 +90,15 @@ function Feedback({ params }) {
 
   return (
     <div className='py-6'>
-      {/* Show confetti only after loading is complete */}
-      {showConfetti && (
+      {/* Show confetti only if confettiVisible is true */}
+      {confettiVisible && (
         <Confetti
           width={window.innerWidth * 0.98}
           height={window.innerHeight}
           style={{
-            opacity: showConfetti ? 1 : 0, // Gradually fade out
-            transition: "opacity 1s ease-out", // Smooth fade-out transition
+            opacity: confettiOpacity,
+            transition: "opacity 0.5s ease-out",
+            pointerEvents: "none"
           }}
         />
       )}
@@ -100,9 +128,26 @@ function Feedback({ params }) {
         </div>
       ) : (
         <div>
-          <h2 className='text-3xl'>
-            <span className='text-tertiary font-semibold'>Congratulations!</span> You have completed your mock interview.
-          </h2>
+          {showCongrats ? (
+            <h2 className='text-3xl'>
+              <span className='text-tertiary font-semibold'>Congratulations!</span> You have completed your mock interview.
+            </h2>
+          ) : (
+            <div className="mb-4">
+              <h2 className="text-2xl font-semibold text-tertiary">Interview Details</h2>
+              <div className="mt-2 text-lg">
+                <div><span className="font-bold">Job Title:</span> {interviewDetails?.jobPosition?.charAt(0).toUpperCase() + interviewDetails?.jobPosition?.slice(1) || "N/A"}</div>
+                <div><span className="font-bold">Experience:</span> {interviewDetails?.jobExperience || "N/A"}</div>
+                <div>
+                  <span className="font-bold">Created At:</span>{" "}
+                  {interviewDetails?.createdAt
+                    ? interviewDetails.createdAt
+                    : "N/A"
+                  }
+                </div>
+              </div>
+            </div>
+          )}
           <h2 className='text-gray-500 mt-3 font-semibold'>Find below the interview questions and feedback for improvement</h2>
 
           <div className='flex flex-col gap-3 mt-6'>

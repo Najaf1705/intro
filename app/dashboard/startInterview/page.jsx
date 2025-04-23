@@ -23,6 +23,7 @@ import { useUser } from '@clerk/nextjs';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { updateCurrentInterviewDetail } from '@/redux/features/currentInterviewDetailSlice';
+import { fetchUserPreviousInterviews } from '@/redux/features/userPreviousIntsSlice';
 
 
 function Interview() {
@@ -53,60 +54,62 @@ function Interview() {
   };
 
   const handleStart = async () => {
-    try {      
+    try {
       setLoading(true);
-  
-      // const inputPrompt = `Job Position: ${currentInterviewDetail?.jobPosition} Tech Stack: ${currentInterviewDetail?.jobDesc} Experience Level: ${currentInterviewDetail?.experience} Instructions: Please generate mock interview questions along with answers based on the provided job position, tech stack, and experience. The questions should cover: Core technical skills related to the tech stack. Problem-solving and coding challenges relevant to the role. System design and architecture. Best practices for coding and performance optimization. Behavioral questions suitable for a candidate with ${currentInterviewDetail?.experience} years of experience. Give questions and answers as an array of objects each containing a question and answer only 7 questions [{},{}...] nothing else`;
-      // const result = await chatSession.sendMessage(inputPrompt);
-      // const response = await result.response.text();
-      // const cleanedResponse = response.replaceAll('```json', '').replaceAll('```', '');
-      // const parsedResponse = JSON.parse(cleanedResponse);
 
-      const parsedResponse=[{"question": "Describe the different types of HTTP methods and when you would use each.","answer": "The most common HTTP methods are GET, POST, PUT, PATCH, and DELETE. GET retrieves data, POST creates new data, PUT updates existing data completely, PATCH updates existing data partially, and DELETE removes data."},{"question": "Explain the difference between Promises and Async/Await in Node.js.","answer": "Promises represent the eventual result of an asynchronous operation, allowing for cleaner handling of asynchronous code than callbacks. Async/Await builds on top of Promises, providing a more synchronous-looking syntax to work with asynchronous code."},{"question": "You are building a user authentication system for a web application. How would you handle user registration, login, and password security in Node.js using a database?","answer": "I would use a combination of bcrypt or Argon2 for password hashing to protect user data, sessions or JWTs for user authentication, and a database like MongoDB or PostgreSQL to store user data securely."},{"question": "Describe a time you had to debug a complex Node.js issue in a production environment. What steps did you take to resolve the problem?","answer": "I once encountered a memory leak issue in a Node.js application. To debug, I used tools like Node.js profiler to identify memory usage patterns and isolate the leak. After identifying the issue, I re-wrote the code using a more efficient memory management strategy and resolved the problem."},{"question": "Design a RESTful API for a simple blog platform. What endpoints would you define, and how would you handle data retrieval and manipulation?","answer": "Endpoints would include '/posts' to list posts, '/posts/{id}' for a single post, '/users' for user management, and '/comments' for comment management. Each endpoint would use appropriate HTTP methods for CRUD operations, and I'd use middleware for authentication, authorization, and validation."},{"question": "Explain how you would ensure your Node.js application performs optimally and scales efficiently.","answer": "Performance optimization strategies include code profiling, caching data frequently accessed, using appropriate data structures and algorithms, and employing load balancing for scalability. Utilizing a database optimized for the workload, minimizing database queries, and proper code structure for maintainability are essential."},{"question": "Tell me about a time you worked in a team to implement a complex feature. What was your role, and how did you contribute to the success of the project?","answer": "On a previous project, I was responsible for building the backend API for a new e-commerce feature. I collaborated closely with the frontend team, participated in code reviews, and communicated effectively to ensure the API met the frontend's needs and aligned with overall project goals."}];
+      // Retrieve questions from the Redux store
+      const questions = currentInterviewDetail?.questions;
+      console.log('Questions:', questions);
 
-      if (parsedResponse) {
+      if (questions && questions.length > 0) {
         const dbResponse = await db
           .insert(MockInterview)
           .values({
-            mockId:uuidv4(),
-            jsonMockResponse:parsedResponse,
-            jobPosition:currentInterviewDetail.jobPosition,
-            jobDesc:currentInterviewDetail.jobDesc,
-            jobExperience:currentInterviewDetail.experience,
-            createdBy:user.primaryEmailAddress?.emailAddress,
-            createdAt: moment().format('DD-MM-yyyy')
+            mockId: uuidv4(),
+            jsonMockResponse: questions, // Use questions from Redux
+            jobPosition: currentInterviewDetail.jobPosition,
+            jobDesc: currentInterviewDetail.jobDesc,
+            jobExperience: currentInterviewDetail.experience,
+            createdBy: user.primaryEmailAddress?.emailAddress,
+            createdAt: moment().format('DD-MM-yyyy'),
           })
-          .returning({mockId:MockInterview.mockId})
-  
+          .returning({ mockId: MockInterview.mockId });
+
         if (dbResponse) {
           setInterviewData(dbResponse[0]);
-          
+
           // Dispatch updated interview details to Redux store
-          dispatch(updateCurrentInterviewDetail({
-            ...currentInterviewDetail,
-            mockId: dbResponse[0]?.mockId,
-          }));
+          dispatch(
+            updateCurrentInterviewDetail({
+              ...currentInterviewDetail,
+              mockId: dbResponse[0]?.mockId,
+            })
+          );
+
+          // Update user's previous interviews in Redux
+          dispatch(fetchUserPreviousInterviews(user));
 
           toast({
-            variant: "success",
-            title: "Interview Started.",
-          })
+            variant: 'success',
+            title: 'Interview Started.',
+          });
 
-          router.replace(`/dashboard/interview/${dbResponse[0]?.mockId}/interviewScreen/`);
+          router.replace(
+            `/dashboard/interview/${dbResponse[0]?.mockId}/interviewScreen/`
+          );
         }
       } else {
         toast({
-          variant: "destructive",
-          title: "Failed to parse the response. Please try again.",
-        })
+          variant: 'destructive',
+          title: 'No questions available. Please try again.',
+        });
       }
     } catch (error) {
       console.error('Error during handleStart:', error);
       toast({
-          variant: "destructive",
-          title: "An error occured, please try again.",
-        })
-
+        variant: 'destructive',
+        title: 'An error occurred, please try again.',
+      });
     } finally {
       setLoading(false);
       setShowStartDialog(false);
@@ -115,7 +118,7 @@ function Interview() {
 
   if (loading) {
     return (
-      <div className="mx-10 my-20">
+      <div className="mx-10 my-20 md:my-32">
         <h2 className="text-2xl font-bold mb-5">
           <Skeleton className="h-8 w-48" />
         </h2>
@@ -145,7 +148,7 @@ function Interview() {
   }
 
   return (
-    <div className="mx-10 my-20">
+    <div className="mx-10 my-20 md:my-44">
       <h2 className="text-2xl font-bold mb-5">Let's get started</h2>
       <div className="w-full grid grid-cols-1 gap-5 md:grid-cols-2">
         <div className="flex flex-col">

@@ -21,6 +21,22 @@ const store = makeStore(); // Create a Redux store instance
 export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+        <title>Intro</title>
+        <meta name="description" content="Intro - Your AI Interview Assistant" />
+        <meta name="theme-color" content="#000000" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        {/* <link rel="manifest" href="/site.webmanifest" /> */}
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />
+        <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@700&display=swap" rel="stylesheet"></link>
+
+        {/* <link rel="preload" href="/fonts/Quicksand.ttf" as="font" crossOrigin="true" /> */}
+        {/* <link rel="preload" href="/fonts/Quicksand-Bold.ttf" as="font" crossOrigin="true" /> */}
+
+      </head>
       <body
         className={`${quicksand.variable} antialiased flex flex-col min-h-screen`}
       >

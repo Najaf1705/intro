@@ -24,19 +24,14 @@ function AddNewInt() {
   const [jobDesc, setJobDesc] = useState("");
   const [experience, setExperience] = useState("");
   const [loading, setLoading] = useState(false);
-  
+  const [resumeFile, setResumeFile] = useState(null); // State for the uploaded file
+  const [uploading, setUploading] = useState(false); // State for resume upload loading
+
   const dispatch = useDispatch();
   const { user, isSignedIn } = useUser();
   const { toast } = useToast();
 
   const submitForm = async (e) => {
-    if(!isSignedIn) {
-      toast({
-        variant: "info",
-        title: "You need to login first.",
-      })
-      return;
-    }
     e.preventDefault();
     setLoading(true);
 
@@ -49,14 +44,87 @@ function AddNewInt() {
     );
 
     router.push("/dashboard/startInterview");
-    // setLoading(false);
+    setLoading(false);
+  };
+
+  const handleResumeUpload = async (e) => {
+    e.preventDefault();
+
+    if (!resumeFile) {
+      toast({
+        variant: "info",
+        title: "Please select a PDF file to upload.",
+      });
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("resume", resumeFile);
+
+    setUploading(true); // Start loading spinner
+    console.log("Uploading resume..."); // Debugging statement
+
+    try {
+      const response = await fetch("http://localhost:5000/upload_resume", {
+        method: "POST",
+        body: formData,
+      });
+
+      console.log("Response received:", response); // Debugging statement
+
+      if (response.ok) {
+        const data = await response.json(); // Parse the response as JSON
+        console.log("Response data:", data); // Debugging statement
+
+        // Dispatch questions and answers to Redux
+        dispatch(
+          updateCurrentInterviewDetail({
+            jobPosition: data.job_role,
+            experience: data.experience_years,
+            questionsAndAnswers: data.questions_and_answers, // Add questions and answers to Redux
+          })
+        );
+
+        toast({
+          variant: "success",
+          title: "Resume uploaded successfully!",
+          description: `Job Role: ${data.job_role}, Experience: ${data.experience_years} years`,
+        });
+
+        router.push("/dashboard/startInterview");
+      } else {
+        const errorData = await response.json(); // Parse error response as JSON
+        console.error("Error response data:", errorData); // Debugging statement
+        toast({
+          variant: "destructive",
+          title: "Failed to upload resume",
+          description: errorData.error || "An error occurred.",
+        });
+      }
+    } catch (error) {
+      console.error("Error during upload:", error); // Debugging statement
+      toast({
+        variant: "destructive",
+        title: "Failed to upload resume",
+        description: error.message,
+      });
+    } finally {
+      setUploading(false); // Stop loading spinner
+    }
   };
 
   return (
     <div className="p-3 min-w-72 mx-2">
       <div
         className="p-10 border hover:border-tertiary hover:text-tertiary rounded-lg bg-secondary hover:shadow-secondary hover:shadow-lg hover:scale-105 cursor-pointer transition-all"
-        onClick={() => setOpenDialog(true)}
+        onClick={() => {
+          if (!isSignedIn)
+            return toast({
+              variant: "info",
+              title: "Please log in to create interview",
+            });
+          setOpenDialog(true);
+        }}
       >
         <h2 className="text-lg text-center">+ Add New</h2>
       </div>
@@ -70,9 +138,12 @@ function AddNewInt() {
             maxHeight: "80vh",
             overflowY: "auto",
           }}
-          className="bg-secondary text-secondary-foreground sm:max-w-lg p-4 sm:p-6">
+          className="bg-secondary text-secondary-foreground sm:max-w-lg p-4 sm:p-6"
+        >
           <DialogHeader>
-            <DialogTitle className="text-tertiary text-xl">Tell us more about the job</DialogTitle>
+            <DialogTitle className="text-tertiary text-xl">
+              Tell us more about the job
+            </DialogTitle>
             <DialogDescription className="text-secondary-foreground"></DialogDescription>
           </DialogHeader>
           <form onSubmit={submitForm} className="w-full">
@@ -108,11 +179,46 @@ function AddNewInt() {
                 />
               </div>
             </div>
+            <div className="mt-5">
+              <label>Upload Resume (PDF only)</label>
+              <Input
+                type="file"
+                accept="application/pdf"
+                className="mt-1 bg-primary-foreground"
+                onChange={(e) => setResumeFile(e.target.files[0])}
+              />
+              <Button
+                className="mt-3 font-bold flex items-center"
+                type="button"
+                variant="default"
+                onClick={handleResumeUpload}
+                disabled={uploading} // Disable button while uploading
+              >
+                {uploading ? (
+                  <>
+                    <LoaderCircle className="mr-2 animate-spin" />
+                    Generating...
+                  </>
+                ) : (
+                  "Upload Resume"
+                )}
+              </Button>
+            </div>
             <div className="flex gap-5 justify-end mt-3 ">
-              <Button className="font-bold" type="button" variant="ghost" onClick={() => setOpenDialog(false)}>
+              <Button
+                className="font-bold"
+                type="button"
+                variant="ghost"
+                onClick={() => setOpenDialog(false)}
+              >
                 Cancel
               </Button>
-              <Button className="font-bold" type="submit" disabled={loading} variant="default">
+              <Button
+                className="font-bold"
+                type="submit"
+                disabled={loading}
+                variant="default"
+              >
                 {loading ? (
                   <>
                     <LoaderCircle className="mr-1 animate-spin" /> Preparing
