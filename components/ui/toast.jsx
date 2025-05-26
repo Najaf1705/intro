@@ -26,13 +26,13 @@ const toastVariants = cva(
   {
     variants: {
       variant: {
-        default: "border bg-background text-foreground shadow-md hover:shadow-lg",
+        default: "border bg-background backdrop-blur-sm text-foreground shadow-md hover:shadow-lg  [backdrop-filter:blur(8px)_brightness(1.1)_saturate(1.2)]",
         destructive:
-          "border border-red-500 bg-red-50 text-red-700 shadow-md hover:shadow-lg",
+          "border border-red-500 bg-red-50/80 backdrop-blur-[16px] bg-opacity-60 text-red-700 shadow-md hover:shadow-lg  [backdrop-filter:blur(8px)_brightness(1.1)_saturate(1.2)]",
         success:
-          "border border-green-500 bg-green-50 text-green-700 shadow-md hover:shadow-lg",
+          "border border-green-500 bg-green-50/80 backdrop-blur-[16px] bg-opacity-60 text-green-700 shadow-md hover:shadow-lg  [backdrop-filter:blur(8px)_brightness(1.1)_saturate(1.2)]",
         info:
-          "border border-yellow-500 bg-yellow-50 text-yellow-700 shadow-md hover:shadow-lg",
+          "border border-yellow-500 bg-yellow-50/80 backdrop-blur-[16px] bg-opacity-60 text-yellow-700 shadow-md hover:shadow-lg  [backdrop-filter:blur(8px)_brightness(1.1)_saturate(1.2)]",
       },
     },
     defaultVariants: {

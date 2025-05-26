@@ -128,8 +128,12 @@ function AddNewInt() {
       >
         <h2 className="text-lg text-center">+ Add New</h2>
       </div>
-      <Dialog open={openDialog} onOpenChange={setOpenDialog}>
+      <Dialog
+        open={openDialog}
+        onOpenChange={setOpenDialog}
+      >
         <DialogContent
+          onInteractOutside={e => e.preventDefault()}
           style={{
             position: "fixed",
             top: "50%",

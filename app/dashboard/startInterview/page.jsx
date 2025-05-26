@@ -118,32 +118,36 @@ function Interview() {
 
   if (loading) {
     return (
-      <div className="mx-10 my-20 md:my-32">
-        <h2 className="text-2xl font-bold mb-5">
-          <Skeleton className="h-8 w-48" />
-        </h2>
-        <div className="w-full grid grid-cols-1 gap-5 md:grid-cols-2">
-          <div className="flex flex-col">
-            <div className="bg-secondary gap-5 p-5 border rounded-md">
-              <Skeleton className="h-6 w-full mb-2" />
-              <Skeleton className="h-6 w-full mb-2" />
-              <Skeleton className="h-6 w-full" />
-            </div>
-            <div className="my-5 p-5 text-tertiary rounded-md">
-              <Skeleton className="h-6 w-32 mb-2" />
-              <Skeleton className="h-16 w-full" />
-            </div>
+      <div className="mx-10 my-20 md:my-32 animate-fade-in">
+      <h2 className="text-2xl font-bold mb-5">
+        <Skeleton className="h-8 w-48" />
+      </h2>
+      <div className="w-full grid grid-cols-1 gap-5 md:grid-cols-2">
+        <div className="flex flex-col">
+          <div className="bg-secondary/50 backdrop-blur-sm gap-5 p-5 border rounded-md">
+            <Skeleton className="h-6 w-[90%] mb-4" />
+            <Skeleton className="h-24 w-full mb-4" />
+            <Skeleton className="h-6 w-[70%]" />
           </div>
-          <div className="flex flex-col items-center">
-            <Skeleton className="h-72 w-72 rounded-lg" />
-            <Skeleton className="h-10 w-48 mt-2 rounded-md" />
+          <div className="my-5 p-5 rounded-md border border-yellow-500/20 bg-yellow-50/30">
+            <Skeleton className="h-6 w-32 mb-3" />
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-[90%]" />
+              <Skeleton className="h-4 w-[80%]" />
+            </div>
           </div>
         </div>
-        <div className="mt-5 flex flex-row justify-center gap-4">
-          <Skeleton className="h-12 w-48 rounded-md" />
-          <Skeleton className="h-12 w-48 rounded-md" />
+        <div className="flex flex-col items-center">
+          <Skeleton className="h-72 w-full max-w-md rounded-lg" />
+          <Skeleton className="h-10 w-48 mt-4 rounded-md" />
         </div>
       </div>
+      <div className="mt-8 flex flex-row justify-center gap-4">
+        <Skeleton className="h-11 w-40 rounded-md" />
+        <Skeleton className="h-11 w-40 rounded-md" />
+      </div>
+    </div>
     );
   }
 
