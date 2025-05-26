@@ -56,12 +56,23 @@ function AddNewInt() {
     <div className="p-3 min-w-72 mx-2">
       <div
         className="p-10 border hover:border-tertiary hover:text-tertiary rounded-lg bg-secondary hover:shadow-secondary hover:shadow-lg hover:scale-105 cursor-pointer transition-all"
-        onClick={() => setOpenDialog(true)}
+        onClick={() => {
+          if (!isSignedIn)
+            return toast({
+              variant: "info",
+              title: "Please log in to create interview",
+            });
+          setOpenDialog(true);
+        }}
       >
         <h2 className="text-lg text-center">+ Add New</h2>
       </div>
-      <Dialog open={openDialog} onOpenChange={setOpenDialog}>
+      <Dialog
+        open={openDialog}
+        onOpenChange={setOpenDialog}
+      >
         <DialogContent
+          onInteractOutside={e => e.preventDefault()}
           style={{
             position: "fixed",
             top: "50%",
@@ -70,9 +81,12 @@ function AddNewInt() {
             maxHeight: "80vh",
             overflowY: "auto",
           }}
-          className="bg-secondary text-secondary-foreground sm:max-w-lg p-4 sm:p-6">
+          className="bg-secondary text-secondary-foreground sm:max-w-lg p-4 sm:p-6"
+        >
           <DialogHeader>
-            <DialogTitle className="text-tertiary text-xl">Tell us more about the job</DialogTitle>
+            <DialogTitle className="text-tertiary text-xl">
+              Tell us more about the job
+            </DialogTitle>
             <DialogDescription className="text-secondary-foreground"></DialogDescription>
           </DialogHeader>
           <form onSubmit={submitForm} className="w-full">
@@ -108,11 +122,22 @@ function AddNewInt() {
                 />
               </div>
             </div>
+            
             <div className="flex gap-5 justify-end mt-3 ">
-              <Button className="font-bold" type="button" variant="ghost" onClick={() => setOpenDialog(false)}>
+              <Button
+                className="font-bold"
+                type="button"
+                variant="ghost"
+                onClick={() => setOpenDialog(false)}
+              >
                 Cancel
               </Button>
-              <Button className="font-bold" type="submit" disabled={loading} variant="default">
+              <Button
+                className="font-bold"
+                type="submit"
+                disabled={loading}
+                variant="default"
+              >
                 {loading ? (
                   <>
                     <LoaderCircle className="mr-1 animate-spin" /> Preparing

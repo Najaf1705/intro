@@ -61,8 +61,8 @@ function Header() {
   const navItems = [
     { path: "/home", label: "Home" },
     { path: "/dashboard", label: "Dashboard" },
-    { path: "/questions", label: "Questions" },
-    { path: "/upgrade", label: "Upgrade" },
+    // { path: "/questions", label: "Questions" },
+    // { path: "/upgrade", label: "Upgrade" },
   ];
 
   // Handle navigation

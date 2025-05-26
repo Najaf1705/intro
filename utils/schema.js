@@ -21,4 +21,5 @@ export const UserAnswer=pgTable('userAnswer',{
     rating:varchar('rating'),
     userEmail:varchar('userEmail'),
     createdAt:varchar('createdAt'),
+    questionId:serial('questionId').notNull()
 })

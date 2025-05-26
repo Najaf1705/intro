@@ -31,7 +31,7 @@ export default function RootLayout({ children }) {
               <div className="flex-grow">{children}</div>
               <footer className="text-center text-sm font-bold mt-auto">
                 © {new Date().getFullYear()}{" "}
-                <span className="text-tertiary">Kurosaki Ichigo.</span> All
+                <span className="text-tertiary">Enzoe.</span> All
                 rights reserved.
               </footer>
               <Toaster />

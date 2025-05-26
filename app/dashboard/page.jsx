@@ -3,6 +3,7 @@ import React from "react";
 import AddNewInt from "@/components/AddNewInt";
 import { useUser } from "@clerk/nextjs";
 import { Skeleton } from "@/components/ui/skeleton";
+import PreviousInt from "@/components/PreviousInt";
 
 function Dashboard() {
   const { isLoaded, user } = useUser(); // Get user data from Clerk
@@ -29,10 +30,11 @@ function Dashboard() {
       </h2>
       <h2>Create and start your AI mockup Interview</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 my-5 wrap">
-        <AddNewInt />
-        <AddNewInt />
+        {/* <AddNewInt />
+        <AddNewInt /> */}
         <AddNewInt />
       </div>
+      <PreviousInt/>
     </div>
   );
 }

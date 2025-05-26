@@ -2,8 +2,10 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const HomePage = () => {
+    const router = useRouter();
     return (
         <div className="min-h-screen mt-24 bg-background text-foreground font-saria">
             {/* Hero Section */}
@@ -21,25 +23,55 @@ const HomePage = () => {
                     Boost your interview skills and increase your success with AI-driven insights. Discover a smarter way to
                     prepare, practice, and stand out.
                 </p>
-                <div className="flex flex-col items-end space-x-8">
+                {/* <div className="flex flex-col items-end space-x-8">
                     <div>250k+ Offers Received</div>
                     <div>1.2M+ Interview Access</div>
+                </div> */}
+            </section>
+
+            {/* Additional Info Section */}
+            <section className="flex justify-center px-6 py-16">
+                <div className="max-w-4xl flex items-center">
+
+                    <div>
+                        <p className="text-muted-foreground mb-4">
+                            Unleash your potential with personalized AI insights and targeted interview practice.
+                        </p>
+                        <p className="text-muted-foreground mb-4">
+                            Transform the way you prepare, gain confidence, and boost your chances of landing your dream job. Let AI
+                            be your edge in today's competitive job market.
+                        </p>
+                        <button className="bg-tertiary text-white px-4 py-2 rounded"
+                            onClick={() => router.replace("/dashboard")}
+                        >
+                            Practice
+                        </button>
+                    </div>
+
+                    <Image
+                        src="/images/ai.jpg"
+                        alt="Office Setup"
+                        width={500}
+                        height={500}
+                        className="object-cover rounded-lg mr-8"
+                    />
+
                 </div>
             </section>
 
             {/* Main Image Section */}
-            <section className="relative px-6 py-8">
+            {/* <section className="relative px-6 py-8">
                 <Image
                     src="/images/homeHero.jpg"
                     alt="AI Interview Practice"
                     width={1200}
                     height={400}
-                    className="w-full h-64 object-cover object-center rounded-lg"
+                    className="w-full h-64 object-top rounded-lg"
                 />
-            </section>
+            </section> */}
 
             {/* Partners Section */}
-            <section className="relative overflow-hidden py-16">
+            {/* <section className="relative overflow-hidden py-16">
                 <div className="marquee">
                     <div className="marquee-content">
                         {[
@@ -57,9 +89,9 @@ const HomePage = () => {
                                 height={150}
                                 className="w-36 h-36 xl:w-44 xl:h-44 object-contain transition-all duration-300 mx-6"
                             />
-                        ))}
+                        ))} */}
                         {/* Duplicate content for seamless scrolling */}
-                        {[
+                        {/* {[
                             { src: "/images/firebase.png", alt: "Firebase" },
                             { src: "/images/microsoft.png", alt: "Microsoft" },
                             { src: "/images/meet.png", alt: "Google Meet" },
@@ -77,32 +109,33 @@ const HomePage = () => {
                         ))}
                     </div>
                 </div>
-            </section>
+            </section> */}
 
-            {/* Additional Info Section */}
-            {/* <section className="flex justify-center px-6 py-16">
-        <div className="max-w-4xl flex items-center">
-          <Image
-            src="/images/office-setup.jpg"
-            alt="Office Setup"
-            width={400}
-            height={300}
-            className="w-1/2 h-64 object-cover rounded-lg mr-8"
-          />
-          <div>
-            <p className="text-muted-foreground mb-4">
-              Unleash your potential with personalized AI insights and targeted interview practice.
-            </p>
-            <p className="text-muted-foreground mb-4">
-              Transform the way you prepare, gain confidence, and boost your chances of landing your dream job. Let AI
-              be your edge in today's competitive job market.
-            </p>
-            <button className="bg-tertiary text-white px-4 py-2 rounded">
-              Generate
-            </button>
-          </div>
-        </div>
-      </section> */}
+            {/* Additional Info Section
+            <section className="flex justify-center px-6 py-16">
+                <div className="max-w-4xl flex items-center">
+                    <Image
+                        src="/images/ai.jpg"
+                        alt="Office Setup"
+                        width={500}
+                        height={500}
+                        className="object-cover rounded-lg mr-8"
+                    />
+
+                    <div>
+                        <p className="text-muted-foreground mb-4">
+                            Unleash your potential with personalized AI insights and targeted interview practice.
+                        </p>
+                        <p className="text-muted-foreground mb-4">
+                            Transform the way you prepare, gain confidence, and boost your chances of landing your dream job. Let AI
+                            be your edge in today's competitive job market.
+                        </p>
+                        <button className="bg-tertiary text-white px-4 py-2 rounded">
+                            Generate
+                        </button>
+                    </div>
+                </div>
+            </section> */}
         </div>
     );
 };
