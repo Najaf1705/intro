@@ -44,7 +44,7 @@ function Interview() {
 
   useEffect(() => {
     if (currentInterviewDetail) {
-      setLoading(false); 
+      setLoading(false);
     }
   }, [currentInterviewDetail]);
 
@@ -53,10 +53,10 @@ function Interview() {
   };
 
   const handleStart = async () => {
-    try {      
+    try {
       setLoading(true);
-  
-      const inputPrompt = `Job Position: ${currentInterviewDetail?.jobPosition} Tech Stack: ${currentInterviewDetail?.jobDesc} Experience Level: ${currentInterviewDetail?.experience} Instructions: Please generate mock interview questions along with answers based on the provided job position, tech stack, and experience. The questions should cover: Core technical skills related to the tech stack. Problem-solving and coding challenges relevant to the role. System design and architecture. Best practices for coding and performance optimization. Behavioral questions suitable for a candidate with ${currentInterviewDetail?.experience} years of experience. Give questions and answers as an array of objects each containing a question and answer only 7 questions [{},{}...] nothing else`;
+
+      const inputPrompt = `Job Position: ${currentInterviewDetail?.jobPosition} Tech Stack: ${currentInterviewDetail?.jobDesc} Experience Level: ${currentInterviewDetail?.experience} Instructions: Please generate mock interview questions along with answers based on the provided job position, tech stack, and experience. The questions should cover: Core technical skills related to the tech stack. Problem-solving relevant to the role. System design and architecture. Best practices for coding and performance optimization. Behavioral questions suitable for a candidate with ${currentInterviewDetail?.experience} years of experience. Keep in mind that questions should be verbaly answerable. Give questions and answers as an array of objects each containing a question and answer only 7 questions [{},{}...] nothing else`;
       const result = await chatSession.sendMessage(inputPrompt);
       const response = await result.response.text();
       const cleanedResponse = response.replaceAll('```json', '').replaceAll('```', '');
@@ -68,19 +68,19 @@ function Interview() {
         const dbResponse = await db
           .insert(MockInterview)
           .values({
-            mockId:uuidv4(),
-            jsonMockResponse:parsedResponse,
-            jobPosition:currentInterviewDetail.jobPosition,
-            jobDesc:currentInterviewDetail.jobDesc,
-            jobExperience:currentInterviewDetail.experience,
-            createdBy:user.primaryEmailAddress?.emailAddress,
+            mockId: uuidv4(),
+            jsonMockResponse: parsedResponse,
+            jobPosition: currentInterviewDetail.jobPosition,
+            jobDesc: currentInterviewDetail.jobDesc,
+            jobExperience: currentInterviewDetail.experience,
+            createdBy: user.primaryEmailAddress?.emailAddress,
             createdAt: moment().format('DD-MM-yyyy')
           })
-          .returning({mockId:MockInterview.mockId})
-  
+          .returning({ mockId: MockInterview.mockId })
+
         if (dbResponse) {
           setInterviewData(dbResponse[0]);
-          
+
           // Dispatch updated interview details to Redux store
           dispatch(updateCurrentInterviewDetail({
             ...currentInterviewDetail,
@@ -104,9 +104,9 @@ function Interview() {
     } catch (error) {
       console.error('Error during handleStart:', error);
       toast({
-          variant: "destructive",
-          title: "An error occured, please try again.",
-        })
+        variant: "destructive",
+        title: "An error occured, please try again.",
+      })
 
     } finally {
       setLoading(false);
@@ -166,11 +166,14 @@ function Interview() {
               <Lightbulb />
               <strong>Information</strong>
             </h2>
-            <h2 className="flex gap-2">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Beatae
-              autem voluptatum impedit eligendi? Minima iste illo nobis optio
-              sequi, officia, corrupti beatae, magni omnis reiciendis ut vero
-              velit quibusdam accusamus?
+            <h2 className="flex gap-2 text-base font-medium">
+              <span>
+                • Ensure your webcam and microphone are working.<br />
+                • Answer each question clearly and concisely.<br />
+                • Use real examples from your experience.<br />
+                • You can edit your answer after recording.<br />
+                • Click "Start Interview" when you are ready.
+              </span>
             </h2>
           </div>
         </div>
