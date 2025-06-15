@@ -31,8 +31,13 @@ export default function RootLayout({ children }) {
               <div className="flex-grow">{children}</div>
               <footer className="text-center text-sm font-bold mt-auto">
                 © {new Date().getFullYear()}{" "}
-                <span className="text-tertiary">Enzoe.</span> All
-                rights reserved.
+                <span className="text-tertiary cursor-pointer hover:underline" 
+                  onClick={() => window.open("https://github.com/Najaf1705", "_blank")}
+                  title="Visit Najaf's GitHub Profile" aria-label="Najaf's GitHub Profile"
+                >
+                  {`Najaf`}
+                  </span>
+                  {` All rights reserved.`}
               </footer>
               <Toaster />
             </ClerkProvider>

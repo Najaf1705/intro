@@ -3,9 +3,12 @@ import { UserButton, useUser } from "@clerk/nextjs";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
-import { MenuIcon, XIcon } from "lucide-react";
+import { LucideGithub, MenuIcon, XIcon } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import ThemeSwitch from "@/components/ThemeSwitch";
+import { GitHubLogoIcon } from "@radix-ui/react-icons";
+import { FiGithub } from "react-icons/fi";
+import { AiFillGithub } from "react-icons/ai";
 
 function Header() {
   const { isLoaded } = useUser();
@@ -123,6 +126,12 @@ function Header() {
 
       {/* Theme Switch and User */}
       <div className="flex items-center gap-2">
+        <AiFillGithub size={28}
+          className="cursor-pointer hover:text-tertiary transition"
+          onClick={() => window.open("https://github.com/Najaf1705/Intro", "_blank")}
+          aria-label="Visit GitHub repository"
+          title="Visit GitHub repository"
+        />        
         <ThemeSwitch />
         {!isLoaded ? (
           <Skeleton className="h-8 w-8 rounded-full" />
